@@ -19,6 +19,13 @@ module.exports = {
         }
 
         const GuildId = reaction.message.guildId;
+        // Refetch JSON, in case of updates via /settings edit
+        const StarboardSettings = require('../JsonFiles/HiddenJsonFiles/starboardConfig.json');
+        const GuildStarboardSettings = StarboardSettings[`${GuildId}`];
+
+        // Catch for when Starboard isn't setup yet
+        if ( !GuildStarboardSettings || GuildStarboardSettings["CHANNEL_ID"] == null ) { return; }
+
         // Attempt to fetch into cache
         try {
             await reaction.message.fetch();
@@ -27,10 +34,6 @@ module.exports = {
             // ¯\_(ツ)_/¯
             //console.error(err);
         }
-
-        // Refetch JSON, in case of updates via /settings edit
-        const StarboardSettings = require('../JsonFiles/HiddenJsonFiles/starboardConfig.json');
-        const GuildStarboardSettings = StarboardSettings[`${GuildId}`];
 
         // If Star Reaction count not more than minimum, ignore
         if ( reaction.count < GuildStarboardSettings["MINIMUM_STARS"] ) { return; }
