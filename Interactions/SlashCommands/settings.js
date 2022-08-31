@@ -1,4 +1,4 @@
-const { ChatInputCommandInteraction, ChatInputApplicationCommandData, AutocompleteInteraction, ApplicationCommandType, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, EmbedBuilder, Colors } = require("discord.js");
+const { ChatInputCommandInteraction, ChatInputApplicationCommandData, AutocompleteInteraction, ApplicationCommandType, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, EmbedBuilder, Colors, PermissionsBitField } = require("discord.js");
 const fs = require('fs');
 const { DiscordClient, Collections } = require("../../constants.js");
 const LocalizedErrors = require("../../JsonFiles/errorMessages.json");
@@ -177,6 +177,17 @@ async function editSettings(slashCommand)
 
     if ( !GuildStarboardSettings )
     {
+        if ( InputChannel != null )
+        {
+            // Ensure Bot has Permissions to send in that Channel
+            /** @type {PermissionsBitField} */
+            const BotPermissions = InputChannel.permissionsFor(DiscordClient.user.id);
+            if ( !BotPermissions.has(PermissionFlagsBits.ViewChannel) && !BotPermissions.has(PermissionFlagsBits.SendMessages) )
+            {
+                return await slashCommand.reply({ ephemeral: true, content: `Sorry, but I cannot assign the <#${InputChannel.id}> Channel as the Starboard since I do not have either the "View Channel" and/or the "Send Messages" Permissions for that Channel.` });
+            }
+        }
+
         newSettings = {
             "CHANNEL_ID": InputChannel == null ? null : InputChannel.id,
             "MINIMUM_STARS": InputMinimumStars,
@@ -188,7 +199,17 @@ async function editSettings(slashCommand)
         // Copy current
         newSettings = GuildStarboardSettings;
         // Update if changed
-        if ( InputChannel != null ) { newSettings["CHANNEL_ID"] = InputChannel.id; }
+        if ( InputChannel != null )
+        {
+            // Ensure Bot has Permissions to send in that Channel
+            /** @type {PermissionsBitField} */
+            const BotPermissions = InputChannel.permissionsFor(DiscordClient.user.id);
+            if ( !BotPermissions.has(PermissionFlagsBits.ViewChannel) && !BotPermissions.has(PermissionFlagsBits.SendMessages) )
+            {
+                return await slashCommand.reply({ ephemeral: true, content: `Sorry, but I cannot assign the <#${InputChannel.id}> Channel as the Starboard since I do not have either the "View Channel" and/or the "Send Messages" Permissions for that Channel.` });
+            }
+            else { newSettings["CHANNEL_ID"] = InputChannel.id; }
+        }
         if ( InputMinimumStars != null ) { newSettings["MINIMUM_STARS"] = InputMinimumStars; }
     }
 

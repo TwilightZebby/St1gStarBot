@@ -76,8 +76,16 @@ module.exports = {
         /** @type {TextChannel} */ // Shut up VSC and let me do things lol
         const StarboardChannel = await OriginalMessage.guild.channels.fetch(GuildStarboardSettings["CHANNEL_ID"]).catch(err => {return;});
 
-        // Send to Starboard!
-        await StarboardChannel.send({ embeds: [MessageEmbed], components: [MessageLinkButton] });
+        // Send to Starboard! (If missing SEND_MESSAGES Permission, reset "CHANNEL_ID" Setting to prevent being spam-hit by the error)
+        try { await StarboardChannel.send({ embeds: [MessageEmbed], components: [MessageLinkButton] }); }
+        catch (err)
+        {
+            GuildStarboardSettings["CHANNEL_ID"] = null;
+            fs.writeFile('./JsonFiles/HiddenJsonFiles/starboardConfig.json', JSON.stringify(StarboardSettings, null, 4), async (err) => {
+                if ( err ) { return; }
+            });
+            return;
+        }
 
         // Add to "already posted" Array
         GuildStarboardSettings["STARBOARDED_MESSAGES"].push(OriginalMessage.id);
