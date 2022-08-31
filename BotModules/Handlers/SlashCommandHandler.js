@@ -20,8 +20,8 @@ module.exports = {
         // Checks for SubCommand or SubCommand-Groups, so that they can have their own Cooldowns
         const SubcommandCheck = slashInteraction.options.data.find(cmd => cmd.type === ApplicationCommandOptionType.Subcommand);
         const SubcommandGroupCheck = slashInteraction.options.data.find(cmd => cmd.type === ApplicationCommandOptionType.SubcommandGroup);
-        if ( SubcommandGroupCheck !== null ) { return await this.SubcommandGroup(slashInteraction, SlashCommand); }
-        if ( SubcommandCheck !== null ) { return await this.Subcommand(slashInteraction, SlashCommand); }
+        if ( SubcommandGroupCheck != undefined ) { return await this.SubcommandGroup(slashInteraction, SlashCommand); }
+        if ( SubcommandCheck != undefined ) { return await this.Subcommand(slashInteraction, SlashCommand); }
 
         // DM Check
         if ( SlashCommand.Scope === 'DM' && !(slashInteraction.channel instanceof DMChannel) )

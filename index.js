@@ -105,7 +105,12 @@ const TextCommandHandler = require("./BotModules/Handlers/TextCommandHandler.js"
 
 DiscordClient.on('messageCreate', async (message) => {
     // Partials
-    if ( message.partial ) { return; }
+    if ( message.partial )
+    {
+        // Attempt to fetch full object
+        try { await message.fetch(); }
+        catch (err) { return; }
+    }
 
     // Bots
     if ( message.author.bot ) { return; }
