@@ -179,7 +179,8 @@ async function editSettings(slashCommand)
     {
         newSettings = {
             "CHANNEL_ID": InputChannel == null ? null : InputChannel.id,
-            "MINIMUM_STARS": InputMinimumStars
+            "MINIMUM_STARS": InputMinimumStars,
+            "STARBOARDED_MESSAGES": []
         };
     }
     else

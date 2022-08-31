@@ -207,5 +207,29 @@ DiscordClient.on('interactionCreate', async (interaction) => {
 
 
 /******************************************************************************* */
+// DISCORD - MESSAGE REACTION ADD EVENT
+const StarboardModule = require('./BotModules/StarboardModule.js');
+
+DiscordClient.on('messageReactionAdd', async (reaction, user) => {
+    // Ensure full Reaction Object (and that the Message hasn't been deleted)
+    if ( reaction.partial )
+    {
+        try { await reaction.fetch(); }
+        catch (err) { return; }
+    }
+
+    // If Star Unicode Emoji, pass to Starboard Module, otherwise ignore
+    if ( reaction.emoji.name == "⭐" ) { return await StarboardModule.main(reaction, user); }
+    else { return; }
+});
+
+
+
+
+
+
+
+
+/******************************************************************************* */
 
 DiscordClient.login(Config.TOKEN);
