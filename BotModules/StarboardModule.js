@@ -19,6 +19,15 @@ module.exports = {
         }
 
         const GuildId = reaction.message.guildId;
+        // Attempt to fetch into cache
+        try {
+            await reaction.message.fetch();
+        } catch (err)
+        {
+            // ¯\_(ツ)_/¯
+            //console.error(err);
+        }
+
         // Refetch JSON, in case of updates via /settings edit
         const StarboardSettings = require('../JsonFiles/HiddenJsonFiles/starboardConfig.json');
         const GuildStarboardSettings = StarboardSettings[`${GuildId}`];
@@ -31,7 +40,7 @@ module.exports = {
 
         // Making things easier for oneself
         const OriginalMessage = reaction.message;
-        const MessageMember = OriginalMessage.member;
+        const MessageMember = await OriginalMessage.guild.members.fetch(OriginalMessage.author.id); //OriginalMessage.member;
         let messageExtras = "";
 
         // Construct Embed & Link Button for adding Message to Starboard
@@ -41,9 +50,9 @@ module.exports = {
 
         const MessageEmbed = new EmbedBuilder().setColor(MessageMember.displayHexColor)
         .setAuthor({ name: `${MessageMember.displayName}`, iconURL: MessageMember.displayAvatarURL({ extension: 'png' }) })
-        .setFooter({ text: `<#${OriginalMessage.channelId}>` })
         .setTimestamp(OriginalMessage.createdAt);
-        if ( OriginalMessage.content != null ) { MessageEmbed.setDescription(OriginalMessage.content); }
+
+        if ( OriginalMessage.content != null && OriginalMessage.content != "" && OriginalMessage.content != " " ) { MessageEmbed.setDescription(OriginalMessage.content); }
         if ( OriginalMessage.attachments.size > 0 )
         {
             // If First Attachment is spoilered
@@ -55,6 +64,9 @@ module.exports = {
         }
         if ( OriginalMessage.stickers.size > 0 ) { messageExtras += `- *Contains ${OriginalMessage.stickers.size} Sticker(s)*`; }
         if ( OriginalMessage.embeds.length > 0 ) { messageExtras += `${messageExtras.length > 1 ? `\n` : ""}- *Contains ${OriginalMessage.embeds.length} Embed(s)*` }
+        if ( messageExtras.length > 1 ) { MessageEmbed.addFields({ name: `\u200B`, value: messageExtras }); }
+        // Channel Time
+        MessageEmbed.addFields({ name: `Source Channel`, value: `<#${OriginalMessage.channelId}>` });
         
 
         // Fetch Channel for sending
