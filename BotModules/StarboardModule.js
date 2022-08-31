@@ -1,6 +1,5 @@
 const { MessageReaction, User, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, TextChannel } = require("discord.js");
 const fs = require('fs');
-const { DiscordClient } = require("../../constants.js");
 
 module.exports = {
     /**
