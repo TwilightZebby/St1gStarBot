@@ -1,4 +1,5 @@
 const { ChatInputCommandInteraction, ChatInputApplicationCommandData, AutocompleteInteraction, ApplicationCommandType, PermissionFlagsBits, ApplicationCommandOptionType, ChannelType, EmbedBuilder, Colors } = require("discord.js");
+const fs = require('fs');
 const { DiscordClient, Collections } = require("../../constants.js");
 const LocalizedErrors = require("../../JsonFiles/errorMessages.json");
 const LocalizedStrings = require("../../JsonFiles/stringMessages.json");
@@ -161,5 +162,41 @@ Please use the </settings edit:${slashCommand.commandId}> Slash Command to set u
  */
 async function editSettings(slashCommand)
 {
-    //.
+    // Grab values and data
+    const GuildId = slashCommand.guildId;
+    const StarboardSettings = require('../../JsonFiles/HiddenJsonFiles/starboardConfig.json');
+    const InputChannel = slashCommand.options.getChannel("channel");
+    const InputMinimumStars = slashCommand.options.getInteger("minimum-stars");
+
+    // Ensure *something* was given
+    if ( InputChannel == null && InputMinimumStars == null ) { return await slashCommand.reply({ ephemeral: true, content: `You didn't set any new Setting values! Please try using this Command again, ensuring at least one value is set.` }); }
+
+    // Update based on given Inputs
+    const GuildStarboardSettings = StarboardSettings[`${GuildId}`];
+    let newSettings = {};
+
+    if ( !GuildStarboardSettings )
+    {
+        newSettings = {
+            "CHANNEL_ID": InputChannel == null ? null : InputChannel.id,
+            "MINIMUM_STARS": InputMinimumStars
+        };
+    }
+    else
+    {
+        // Copy current
+        newSettings = GuildStarboardSettings;
+        // Update if changed
+        if ( InputChannel != null ) { newSettings["CHANNEL_ID"] = InputChannel.id; }
+        if ( InputMinimumStars != null ) { newSettings["MINIMUM_STARS"] = InputMinimumStars; }
+    }
+
+    // Update saved Settings
+    StarboardSettings[`${GuildId}`] = newSettings;
+    fs.writeFile('./JsonFiles/HiddenJsonFiles/starboardConfig.json', JSON.stringify(StarboardSettings, null, 4), async (err) => {
+        if ( err ) { return await slashCommand.reply({ ephemeral: true, content: `Sorry, something went wrong while trying to save your updated Starboard Setting(s)... Please try again later` }); }
+    });
+
+    // Respond to User
+    return await slashCommand.reply({ ephemeral: true, content: `✅ Successfully updated your Starboard Settings!` });
 }
