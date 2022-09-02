@@ -6,29 +6,28 @@
     "utf-8-validate": "^5.0.9",
     "zlib-sync": "^0.1.7"
   },
-  "name": "discordbottemplate",
-  "version": "3.0.0",
-  "description": "TwilightZebby's personal Discord Bot Template",
+  "name": "st1gstarbot",
+  "version": "1.0.0",
+  "description": "Updated version of Dr1fterX's Starboard code from his St1gBots",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TwilightZebby/DiscordBotTemplate.git"
+    "url": "git+https://github.com/TwilightZebby/St1gStarBot.git"
   },
   "keywords": [
     "discord",
     "discord-bot",
     "discordjs",
-    "nodejs",
-    "discord-bot-template",
-    "template"
+    "nodejs"
   ],
   "author": "TwilightZebby",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/TwilightZebby/DiscordBotTemplate/issues"
+    "url": "https://github.com/TwilightZebby/St1gStarBot/issues"
   },
-  "homepage": "https://github.com/TwilightZebby/DiscordBotTemplate#readme"
+  "homepage": "https://github.com/TwilightZebby/St1gStarBot#readme",
+  "devDependencies": {}
 }
