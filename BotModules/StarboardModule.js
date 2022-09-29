@@ -43,7 +43,7 @@ module.exports = {
 
         // Making things easier for oneself
         const OriginalMessage = reaction.message;
-        const MessageMember = await OriginalMessage.guild.members.fetch(OriginalMessage.author.id); //OriginalMessage.member;
+        const MessageMember = await OriginalMessage.guild.members.fetch(OriginalMessage.author.id);
         let messageExtras = "";
 
         // Construct Embed & Link Button for adding Message to Starboard
