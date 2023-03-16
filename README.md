@@ -37,17 +37,15 @@ A simple Starboard Discord Bot, made as an updated version of the one found in D
 
 # How to register the Slash Command
 
-1. Go into `./deployCommands.js` and uncomment line 13 (make sure line 16 IS commented)
-  - If you want the Command to be registered Globally (for all Servers the Bot is in), remove the `, Config.ErrorLogGuildID` from the `.create()` method on line 13
+1. Go into `./deployCommands.js` and uncomment the relevant line
 2. Use `node deployCommands.js` in your command line/terminal
 
 # How to UNregister (remove from Discord) the Slash Command
 
-1. Go to `./deployCommands.js` and uncomment line 16 (make sure line 13 IS commented)
+1. Go to `./deployCommands.js` and uncomment the relevant line
 2. Make sure you are unregistering the Command from the Scope it was previously registered to.
   - For instance: Trying to unregister it globally when it is registered to a specific Server will fail.
-  - If you want to unregister it globally, remove the `, Config.ErrorLogGuildID` from the `.set()` method on line 16
-  - Do **NOT** add anything in the empty Array on line 16. The empty Array is used as a shortcut for "unregister ALL Application Commands for this Bot".
+  - Do **NOT** add anything in the empty Array in the `.set()` method. The empty Array is used as a shortcut for "unregister ALL Application Commands for this Bot".
 3. Use `node deployCommands.js` in your command line/terminal
 
 ---
