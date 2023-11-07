@@ -74,7 +74,7 @@ module.exports = {
                     },
                     {
                         type: ApplicationCommandOptionType.Integer,
-                        min_value: 3,
+                        min_value: 1,
                         max_value: 50,
                         name: "minimum-stars",
                         description: "The minimum number of Stars needed for a Message to be added to the Starboard",
